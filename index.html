@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="reset.css" />
+    <script src="http://unpkg.com/tone"></script>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100dvh;
+      }
+      #container {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+      }
+      .letter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+        width: 100px;
+        margin: 10px;
+        border: 1px solid black;
+      }
+      p {
+        font-family: monospace;
+        font-size: xx-large;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div class="letter" id="a">
+        <p>a</p>
+      </div>
+      <div class="letter" id="s">
+        <p>s</p>
+      </div>
+      <div class="letter" id="d">
+        <p>d</p>
+      </div>
+      <div class="letter" id="f">
+        <p>f</p>
+      </div>
+      <div class="letter" style="border: none">
+        <p></p>
+      </div>
+      <div class="letter" id="j">
+        <p>j</p>
+      </div>
+      <div class="letter" id="k">
+        <p>k</p>
+      </div>
+      <div class="letter" id="l">
+        <p>l</p>
+      </div>
+      <div class="letter" id=";">
+        <p>;</p>
+      </div>
+    </div>
+  </body>
+  <script>
+    let activated = false;
+    let synths = {
+      C4: new Tone.Synth().toDestination(),
+      D4: new Tone.Synth().toDestination(),
+      E4: new Tone.Synth().toDestination(),
+      F4: new Tone.Synth().toDestination(),
+      G4: new Tone.Synth().toDestination(),
+      A4: new Tone.Synth().toDestination(),
+      B4: new Tone.Synth().toDestination(),
+      C5: new Tone.Synth().toDestination(),
+    };
+    const playNote = async (note) => {
+      if (!activated) {
+        await Tone.start();
+        activated = true;
+      }
+      console.log(`playing ${note}`);
+
+      //play a middle 'C' for the duration of an 8th note
+      await synths[note].triggerAttackRelease(note, "8n");
+    };
+
+    addEventListener("keydown", (event) => {
+      const notes = {
+        a: "C4",
+        s: "D4",
+        d: "E4",
+        f: "F4",
+        j: "G4",
+        k: "A4",
+        l: "B4",
+        ";": "C5",
+      };
+      if (event.key in notes) {
+        const elt = document.getElementById(event.key);
+        elt.style.backgroundColor = "yellow";
+        setTimeout(() => {
+          elt.style.backgroundColor = "white";
+        }, "200");
+        playNote(notes[event.key]);
+      }
+    });
+  </script>
+</html>
